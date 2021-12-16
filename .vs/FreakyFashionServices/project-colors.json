@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "cc86a5ba-ed32-414d-bbdd-8082598eb47d": {
+      "ProjectGuid": "cc86a5ba-ed32-414d-bbdd-8082598eb47d",
+      "DisplayName": "StockService",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
