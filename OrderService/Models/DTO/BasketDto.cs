@@ -1,8 +1,8 @@
-﻿namespace BasketService.Models.DTO
+﻿namespace OrderService.Models.DTO
 {
     public class BasketDto
     {
-        public string Identifier { get; set; }
+        public string Identifier {  get; set; }
         public ICollection<BasketItemDto> BasketItem { get; set; }
     }
 }

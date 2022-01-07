@@ -8,6 +8,5 @@
         public string ImageUrl { get; set; }
         public double Price { get; set; }
         public string ArticleNumber { get; set; }
-        //public string UrlSlug { get; set; }
     }
 }

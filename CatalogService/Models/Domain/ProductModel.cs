@@ -4,7 +4,7 @@ namespace CatalogService.Models.Domain
 {
     public class ProductModel
     {
-        public ProductModel(int id, string name, string description, string imageUrl, double price, string articleNumber /*string urlSlug*/)
+        public ProductModel(int id, string name, string description, string imageUrl, double price, string articleNumber/*string urlSlug*/)
         {
             Id = id;
             Name = name;

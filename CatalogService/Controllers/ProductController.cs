@@ -2,7 +2,6 @@
 using CatalogService.Data;
 using CatalogService.Models.Domain;
 using CatalogService.Models.DTO;
-using Slugify;
 
 namespace CatalogService.Controllers
 {
@@ -62,4 +61,4 @@ namespace CatalogService.Controllers
         public string ArticleNumber { get; set; }
         //public string UrlSlug { get; set; }
     }
-}
+ }

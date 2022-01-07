@@ -15,7 +15,7 @@ namespace BasketService.Controllers
         }
         public IDistributedCache Cache { get; }
 
-        [HttpPut("{identifier}")]
+        [HttpPut("{basketDto}")]
         public IActionResult CreateBasket(BasketDto basketDto)
         {
             var serializedBasket = JsonSerializer.Serialize(basketDto);
@@ -25,7 +25,7 @@ namespace BasketService.Controllers
             return NoContent(); // generates 204 no content
         }
 
-        [HttpGet("{identifier}")]
+        [HttpGet("{basketNumber}")]
         public ActionResult<BasketDto> GetBasket(string basketNumber)
         {
 

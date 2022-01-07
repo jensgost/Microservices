@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using OrderService.Data;
+using OrderService.Models.Domain;
 using OrderService.Models.DTO;
-using System.Text;
 using System.Text.Json;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace OrderService.Controllers
 {
@@ -11,26 +10,46 @@ namespace OrderService.Controllers
     [ApiController]
     public class OrderController : ControllerBase
     {
-        private readonly IHttpClientFactory httpClientFactory;
-        public OrderController(IHttpClientFactory httpClientFactory)
+        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly OrderServiceContext _context;
+
+        public OrderController(IHttpClientFactory httpClientFactory, OrderServiceContext context)
         {
-            this.httpClientFactory = httpClientFactory;
+            _httpClientFactory = httpClientFactory;
+            _context = context;
         }
 
         [HttpPost]
-        public async Task<IActionResult> MakeOrder(OrderDto orderDto)
+        public async Task<ActionResult<OrderDto>> MakeOrder(OrderDto orderDto) // orderDto förväntar sig få info om identifier o customer från POST-anropet
         {
-            var orderJson = new StringContent(
-                JsonSerializer.Serialize(orderDto),
-                Encoding.UTF8,
-                Application.Json);
-
-            var httpClient = httpClientFactory.CreateClient();
+            var httpClient = _httpClientFactory.CreateClient();
 
             using var httpResponseMessage =
-                await httpClient.PostAsync("http://localhost:9000/api/orders", orderJson);
+                await httpClient.GetAsync($"http://localhost:7000/api/basket/{orderDto.Identifier}");
 
-            return Created("", null);
+            var content = await httpResponseMessage.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var basket = JsonSerializer.Deserialize<BasketDto>
+                (content, options);
+
+            var createOrder = await _context.Order.AddAsync(new Order()
+            {
+                Customer = orderDto.Customer,
+                OrderLines = basket.BasketItem.Select(y => new OrderLine
+                (
+                    y.ProductId,
+                    y.Quantity
+                    )).ToList()
+                });
+
+            await _context.SaveChangesAsync();
+
+            return Created("", new OrderLineDto { OrderLineId = createOrder.Entity.OrderId});
         }
     }
 }
