@@ -1,29 +1,43 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
-namespace CatalogService
+namespace CatalogService.Utilities
 {
-    public static class Slug
-    {
-        public static string Slugify(string phrase)
+        public static class Slug
         {
-            phrase = phrase.ToLowerInvariant();
+        public static string RemoveAccents(this string text)
+            {
+                if (string.IsNullOrWhiteSpace(text))
+                    return text;
 
-            var bytes = Encoding.GetEncoding(0).GetBytes(phrase!);
-            
-            phrase = Encoding.ASCII.GetString(bytes);
+                text = text.Normalize(NormalizationForm.FormD);
+                char[] chars = text
+                    .Where(c => CharUnicodeInfo.GetUnicodeCategory(c)
+                    != UnicodeCategory.NonSpacingMark).ToArray();
 
-            phrase = Regex.Replace(phrase, @"\-", "", RegexOptions.Compiled);
+                return new string(chars).Normalize(NormalizationForm.FormC);
+            }
+            public static string Slugify(this string phrase)
+            {
+                phrase = phrase.ToLowerInvariant();
 
-            phrase = Regex.Replace(phrase, @"\s", "-", RegexOptions.Compiled);
+                var bytes = Encoding.GetEncoding(0).GetBytes(phrase!);
 
-            phrase = Regex.Replace(phrase, @"[^\w\s\p{Pd}]", "", RegexOptions.Compiled);
+                phrase = Encoding.ASCII.GetString(bytes);
 
-            phrase = phrase.Trim('-');
+                phrase = Regex.Replace(phrase, @"\-", "", RegexOptions.Compiled);
 
-            phrase = Regex.Replace(phrase, @"([-]){2,}", "$1", RegexOptions.Compiled);
+                phrase = Regex.Replace(phrase, @"\s", "-", RegexOptions.Compiled);
 
-            return phrase;
+                phrase = Regex.Replace(phrase, @"[^\w\s\p{Pd}]", "", RegexOptions.Compiled);
+
+                phrase = phrase.Trim('-');
+
+                phrase = Regex.Replace(phrase, @"([-]){2,}", "$1", RegexOptions.Compiled);
+
+                return phrase;
+            }
         }
     }
-}

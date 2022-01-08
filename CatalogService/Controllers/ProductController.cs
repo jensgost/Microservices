@@ -2,6 +2,7 @@
 using CatalogService.Data;
 using CatalogService.Models.Domain;
 using CatalogService.Models.DTO;
+using CatalogService.Utilities;
 
 namespace CatalogService.Controllers
 {
@@ -9,11 +10,12 @@ namespace CatalogService.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        private CatalogServiceContext Context { get; }
+
         public ProductController(CatalogServiceContext context)
         {
             Context = context;
         }
-        private CatalogServiceContext Context { get; }
 
         [HttpPost]
         public IActionResult CreateProduct(CreateProductDto createCatalogProduct)
@@ -24,8 +26,8 @@ namespace CatalogService.Controllers
                 createCatalogProduct.Description,
                 createCatalogProduct.ImageUrl,
                 createCatalogProduct.Price,
-                createCatalogProduct.ArticleNumber
-                //Slug.Slugify(createCatalogProduct.Name)
+                createCatalogProduct.ArticleNumber,
+                Slug.Slugify(createCatalogProduct.Name)
                 );
 
             Context.Add(catalogProduct);
@@ -35,9 +37,9 @@ namespace CatalogService.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<CatalogProductDto> GetAll()
+        public IEnumerable<CreatedProductDto> GetAll()
         {
-            var catalogProductDtos = Context.Products.Select(y => new CatalogProductDto
+            var catalogProductDtos = Context.Products.Select(y => new CreatedProductDto
             {
                 Id = y.Id,
                 Name = y.Name,
@@ -45,13 +47,13 @@ namespace CatalogService.Controllers
                 ImageUrl = y.ImageUrl,
                 Price = y.Price,
                 ArticleNumber = y.ArticleNumber,
-                //UrlSlug = y.UrlSlug
+                UrlSlug = y.UrlSlug
             });
 
             return (catalogProductDtos);
         }
     }
-    public class CatalogProductDto
+    /*public class CatalogProductDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -59,6 +61,6 @@ namespace CatalogService.Controllers
         public string ImageUrl { get; set; }
         public double Price { get; set; }
         public string ArticleNumber { get; set; }
-        //public string UrlSlug { get; set; }
-    }
+        public string UrlSlug { get; set; }
+    }*/
  }

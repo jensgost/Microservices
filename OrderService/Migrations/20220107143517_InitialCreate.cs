@@ -14,7 +14,6 @@ namespace OrderService.Migrations
                 {
                     OrderId = table.Column<int>(type: "int", maxLength: 50, nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Customer = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -28,6 +27,8 @@ namespace OrderService.Migrations
                 {
                     OrderLineId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>

@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OrderService.Data;
 
@@ -12,10 +11,9 @@ using OrderService.Data;
 namespace OrderService.Migrations
 {
     [DbContext(typeof(OrderServiceContext))]
-    [Migration("20220103210154_InitialCreate")]
-    partial class InitialCreate
+    partial class OrderServiceContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,10 +35,6 @@ namespace OrderService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Identifier")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("OrderId");
 
                     b.ToTable("Order");
@@ -57,6 +51,12 @@ namespace OrderService.Migrations
                     b.Property<int?>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.HasKey("OrderLineId");
 
                     b.HasIndex("OrderId");
@@ -67,13 +67,13 @@ namespace OrderService.Migrations
             modelBuilder.Entity("OrderService.Models.Domain.OrderLine", b =>
                 {
                     b.HasOne("OrderService.Models.Domain.Order", null)
-                        .WithMany("Lines")
+                        .WithMany("OrderLines")
                         .HasForeignKey("OrderId");
                 });
 
             modelBuilder.Entity("OrderService.Models.Domain.Order", b =>
                 {
-                    b.Navigation("Lines");
+                    b.Navigation("OrderLines");
                 });
 #pragma warning restore 612, 618
         }

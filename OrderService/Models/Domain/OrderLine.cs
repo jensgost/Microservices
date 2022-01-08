@@ -2,15 +2,15 @@
 {
     public class OrderLine
     {
-        public OrderLine(int orderLineId, int quantity)
+        public OrderLine(int productId, int quantity)
         {
-            OrderLineId = orderLineId;
+            ProductId = productId;
             Quantity = quantity;
         }
 
         public int OrderLineId { get; set; }
-        public string Item { get; set; }
         public int Quantity { get; set; }
-        public Order Order { get; set; }   
+        public int ProductId { get; set; }
+
     }
 }

@@ -4,7 +4,7 @@ namespace CatalogService.Models.Domain
 {
     public class ProductModel
     {
-        public ProductModel(int id, string name, string description, string imageUrl, double price, string articleNumber/*string urlSlug*/)
+        public ProductModel(int id, string name, string description, string imageUrl, double price, string articleNumber, string urlSlug)
         {
             Id = id;
             Name = name;
@@ -12,7 +12,7 @@ namespace CatalogService.Models.Domain
             ImageUrl = imageUrl;
             Price = price;
             ArticleNumber = articleNumber;  
-            //UrlSlug = urlSlug;
+            UrlSlug = urlSlug;
         }
 
         public int Id { get; set; }
@@ -21,6 +21,6 @@ namespace CatalogService.Models.Domain
         public string ImageUrl { get; set; }
         public double Price { get; set; }
         public string ArticleNumber { get; set; }
-        //public string UrlSlug { get; set; }
+        public string UrlSlug { get; set; }
     }
 }
